@@ -24,7 +24,7 @@ public class GetOperatingTool implements TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player) {
             Player player = (Player) sender;
-            player.getInventory().addItem(new ItemStack(Material.BLAZE_ROD));
+            player.getInventory().setItemInMainHand(new ItemStack(Material.BLAZE_ROD));
             player.sendMessage(ChatColor.AQUA + "Left click to make first spot, right click to make second spot!");
         }
         return false;
