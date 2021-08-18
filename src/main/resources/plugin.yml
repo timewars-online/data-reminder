@@ -1,0 +1,9 @@
+name: DataReminder
+version: ${project.version}
+main: com.timewars.datarm.DataReminder
+api-version: 1.17
+authors: [ heghw ]
+description: DataReminder plugin for timewars
+commands:
+  dataReminder:
+    description: Main DataReminder Command.
