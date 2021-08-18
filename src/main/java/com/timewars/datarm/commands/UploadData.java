@@ -19,7 +19,7 @@ public class UploadData implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        DataReminder.sp.uploadData(args[0]);
+        DataReminder.sp.uploadData(sender, args[0]);
         return false;
     }
 }

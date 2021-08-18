@@ -19,7 +19,7 @@ public class FindChests implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        DataReminder.sp.startResearches();
+        DataReminder.sp.startResearches(sender);
         return false;
     }
 }
