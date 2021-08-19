@@ -9,7 +9,6 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.lang.management.PlatformLoggingMXBean;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -21,12 +20,13 @@ import java.util.Formatter;
 public class DataControl {
     public Block fSpot, sSpot;
     public World fw, sw;
-    ArrayList<Location> chests, spawnSpots, superChests;
+    ArrayList<Location> chests, spawnSpots, superChests, randomSuperChests;
 
     DataControl() {
         chests = new ArrayList<>();
         spawnSpots = new ArrayList<>();
         superChests = new ArrayList<>();
+        randomSuperChests = new ArrayList<>();
     }
 
     public void addSpawn(Location spot) {
@@ -45,11 +45,12 @@ public class DataControl {
 
     public void uploadData(CommandSender sender, String mapname) {
         int sChestPushed = addPlaces("super_chests", superChests, mapname),
-        chestsPushed =  addPlaces("chests", chests, mapname),
-        spawnspotsPushed = addPlaces("spawnspot", spawnSpots, mapname);
-        System.out.println("Pushed to the database shulkers : " + sChestPushed + ", chests : " + chestsPushed + ", spawnspots : " + spawnspotsPushed);
+                randomSChestPushed = addPlaces("random_super_chests", randomSuperChests, mapname),
+                chestsPushed =  addPlaces("chests", chests, mapname),
+                spawnspotsPushed = addPlaces("spawnspot", spawnSpots, mapname);
+        System.out.println("Pushed to the database random shulkers(white) : " + randomSChestPushed + " shulkers(default) : " + sChestPushed + ", chests : " + chestsPushed + ", spawnspots : " + spawnspotsPushed);
         if(sender instanceof Player) {
-            sender.sendMessage( ChatColor.GREEN + "You pushed to the database shulkers : " + sChestPushed + ", chests : " + chestsPushed + ", spawnspots : " + spawnspotsPushed);
+            sender.sendMessage( ChatColor.GREEN + "You pushed to the database random shulkers(white) : " + randomSChestPushed + ", shulkers(default) : " + sChestPushed + ", chests : " + chestsPushed + ", spawnspots : " + spawnspotsPushed);
         }
         clearData();
     }
@@ -99,10 +100,10 @@ public class DataControl {
                     Math.min(fSpot.getLocation().getX(), sSpot.getLocation().getX()),
                     Math.min(fSpot.getLocation().getY(), sSpot.getLocation().getY()),
                     Math.min(fSpot.getLocation().getZ(), sSpot.getLocation().getZ())),
-                     s = new Location(sw,
-                    Math.max(fSpot.getLocation().getX(), sSpot.getLocation().getX()),
-                    Math.max(fSpot.getLocation().getY(), sSpot.getLocation().getY()),
-                    Math.max(fSpot.getLocation().getZ(), sSpot.getLocation().getZ()));
+                    s = new Location(sw,
+                            Math.max(fSpot.getLocation().getX(), sSpot.getLocation().getX()),
+                            Math.max(fSpot.getLocation().getY(), sSpot.getLocation().getY()),
+                            Math.max(fSpot.getLocation().getZ(), sSpot.getLocation().getZ()));
             for(int x = (int) f.getX(); x <= s.getX(); x++) {
                 for(int y = (int) f.getY(); y <= s.getY(); y++) {
                     for(int z = (int) f.getZ(); z <= s.getZ(); z++) {
@@ -115,12 +116,16 @@ public class DataControl {
                             chests.add(spot);
                             System.out.println(spot.getX() + " " + spot.getY() + " " + spot.getZ());
                         }
+                        if(spot.getBlock().getType() == Material.WHITE_SHULKER_BOX) {
+                            randomSuperChests.add(spot);
+                            System.out.println(spot.getX() + " " + spot.getY() + " " + spot.getZ());
+                        }
                     }
                 }
             }
         }
         if(sender instanceof Player) {
-            sender.sendMessage(ChatColor.DARK_PURPLE + "Shulkers : " + superChests.size() + " , chests : " + chests.size() + " was marked to push");
+            sender.sendMessage(ChatColor.DARK_PURPLE + "White shulkers : " + randomSuperChests.size() + ", shulkers : " + superChests.size() + " , chests : " + chests.size() + " was marked to push");
         }
     }
 }
