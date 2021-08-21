@@ -21,10 +21,10 @@ public class ItemsOperations {
 
     }
 
-    public void saveItems()
+    public void saveItems(String forWhatToChange)
     {
         CustomConfig.getCustomFile().set("items", items);
-        CustomConfig.save();
+        CustomConfig.save(forWhatToChange);
     }
 
     public void loadItems()

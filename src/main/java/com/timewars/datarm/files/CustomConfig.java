@@ -51,7 +51,7 @@ public class CustomConfig {
         customFile = YamlConfiguration.loadConfiguration(file);
     }
 
-    public static void save()
+    public static void save(String forWhatToChange)
     {
         System.out.println("Trying to Save data..");
         try
@@ -64,8 +64,8 @@ public class CustomConfig {
             for ( String line : lines)
                 text += line + System.lineSeparator();;
 
-            String newtext = text.replaceAll("com.timewars.datarm.classes.myItem",
-                    "com.timewars.hungergames.classes.myItem");
+            String newtext = text.replaceAll("datarm",
+                    forWhatToChange); //com.timewars.datarm.classes.myItem
 
             FileWriter writer = new FileWriter(fileForHungerGames);
             writer.write(newtext);

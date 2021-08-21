@@ -23,6 +23,7 @@ public class SaveInventoryToConfig implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         ArrayList<String> list = new ArrayList<>();
+        if ( args.length == 1 ) list.add("<path-for-a-plugin-to-change>");
         return list;
     }
 
@@ -46,8 +47,8 @@ public class SaveInventoryToConfig implements TabExecutor {
                }
 
             }
-
-            itemsOperations.saveItems();
+            String whatTextToChange = args[0];
+            itemsOperations.saveItems(whatTextToChange);
 
             return true;
         }
