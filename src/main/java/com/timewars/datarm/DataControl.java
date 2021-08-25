@@ -20,6 +20,8 @@ import java.util.Formatter;
 public class DataControl {
     public Block fSpot, sSpot;
     public World fw, sw;
+    private Location center;
+    private int radius;
     ArrayList<Location> chests, spawnSpots, superChests, randomSuperChests;
 
     DataControl() {
@@ -41,6 +43,27 @@ public class DataControl {
         superChests.clear();
         chests.clear();
         spawnSpots.clear();
+    }
+
+    public void setMapSize(Location center, int radius) {
+        this.center = center;
+        this.radius = radius;
+    }
+
+    public void uploadMapSize(String mapname) {
+        try(Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/data?autoReconnect=true&useSSL=false", "root", "");
+            Statement statement = connection.createStatement();
+            Formatter q = new Formatter(); Formatter l = new Formatter(); Formatter j = new Formatter();) {
+            String s = q.format("SELECT * FROM map_border WHERE mapname = %s", mapname).toString();
+            if(statement.executeQuery(s).next()) {
+                s = q.format("DELETE FROM map_border WHERE mapname = %s", mapname).toString();
+                statement.execute(s);
+            }
+            s = q.format("INSERT map_border(mapname, xcord, ycord, zcord, radius) VALUES (%s, %d, %d, %d, %d)", mapname, (int) center.getX(), (int) center.getY(), (int) center.getZ(), radius).toString();
+            statement.execute(s);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void uploadData(CommandSender sender, String mapname) {

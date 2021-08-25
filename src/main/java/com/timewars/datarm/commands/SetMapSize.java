@@ -22,7 +22,9 @@ public class SetMapSize implements TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player) {
             Player player = (Player) sender;
-            //TODO
+            Location center = player.getLocation();
+            int radius = Integer.valueOf(args[0]);
+
         }
         return false;
     }

@@ -35,6 +35,7 @@ public final class DataReminder extends JavaPlugin {
         dataReminder.registerCommand("rmSpot", new RemoveSpawnSpot());
         dataReminder.registerCommand("saveInventory", new SaveInventoryToConfig(itemsOperations));
         dataReminder.registerCommand("gelicopter", new CallHelicopter(this));
+        dataReminder.registerCommand("setMapSize", new SetMapSize());
 
         getCommand("dataReminder").setExecutor(dataReminder);
 
