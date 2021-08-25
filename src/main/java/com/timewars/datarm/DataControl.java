@@ -67,6 +67,7 @@ public class DataControl {
     }
 
     public void uploadData(CommandSender sender, String mapname) {
+        uploadMapSize(mapname);
         int sChestPushed = addPlaces("super_chests", superChests, mapname),
                 randomSChestPushed = addPlaces("random_super_chests", randomSuperChests, mapname),
                 chestsPushed =  addPlaces("chests", chests, mapname),
