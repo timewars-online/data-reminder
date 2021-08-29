@@ -41,6 +41,7 @@ public class SetMapSize implements TabExecutor {
 
             BlockData block = Bukkit.createBlockData(Material.GLASS);
             World world = p.getWorld();
+            ArrayList<Location> locations = new ArrayList<>();
 
             Location xzLeftBottom = new Location(p.getWorld(),center.getX()-radius, center.getY(), center.getZ()-radius);
             Location xzRightTop = new Location(p.getWorld(),center.getX()+radius, center.getY(), center.getZ()+radius);
@@ -49,8 +50,13 @@ public class SetMapSize implements TabExecutor {
             {
                 for ( int j = -3; j <= 3 ; j++ )
                 {
-                    p.sendBlockChange(new Location(world, i, p.getLocation().getY() + j, xzLeftBottom.getZ() ), block);
-                    p.sendBlockChange(new Location(world, i,p.getLocation().getY() +  j, xzRightTop.getZ() ), block);
+                    Location location = new Location(world, i, p.getLocation().getY() + j, xzLeftBottom.getZ() );
+                    p.sendBlockChange(location, block);
+                    locations.add(location);
+
+                    location = new Location(world, i,p.getLocation().getY() +  j, xzRightTop.getZ() );
+                    p.sendBlockChange(location, block);
+                    locations.add(location);
                 }
             }
 
@@ -58,8 +64,13 @@ public class SetMapSize implements TabExecutor {
             {
                 for ( int j = -3; j <= 3 ; j++ )
                 {
-                    p.sendBlockChange(new Location(world, xzLeftBottom.getX(), p.getLocation().getY() + j, i ), block);
-                    p.sendBlockChange(new Location(world, xzRightTop.getX(), p.getLocation().getY() + j, i ), block);
+                    Location location = new Location(world, xzLeftBottom.getX(), p.getLocation().getY() + j, i );
+                    p.sendBlockChange(location, block);
+                    locations.add(location);
+
+                    location = new Location(world, xzRightTop.getX(), p.getLocation().getY() + j, i );
+                    p.sendBlockChange(location, block);
+                    locations.add(location);
                 }
             }
 
@@ -69,28 +80,9 @@ public class SetMapSize implements TabExecutor {
             scheduler.scheduleSyncDelayedTask(dataReminder, new Runnable() {
                 @Override
                 public void run() {
-                    for ( int i = xzLeftBottom.getBlockX(); i < xzRightTop.getBlockX(); i++)
+                    for (Location location : locations)
                     {
-                        for ( int j = -3; j <= 3 ; j++ )
-                        {
-                            Location location = new Location(world, i,p.getLocation().getY() + j, xzLeftBottom.getZ());
-                            p.sendBlockChange(location, world.getBlockAt(location).getBlockData());
-
-                            location = new Location(world, i, p.getLocation().getY() + j, xzRightTop.getZ());
-                            p.sendBlockChange(location, world.getBlockAt(location).getBlockData());
-                        }
-                    }
-
-                    for ( int i = xzLeftBottom.getBlockZ(); i < xzRightTop.getBlockZ(); i++)
-                    {
-                        for ( int j = -3; j <= 3 ; j++ )
-                        {
-                            Location location = new Location(world, xzLeftBottom.getX(),p.getLocation().getY() + j, i );
-                            p.sendBlockChange(location, world.getBlockAt(location).getBlockData());
-
-                            location = new Location(world, xzRightTop.getX(),p.getLocation().getY() + j, i );
-                            p.sendBlockChange(location, world.getBlockAt(location).getBlockData());
-                        }
+                        p.sendBlockChange(location, world.getBlockAt(location).getBlockData());
                     }
                 }
             }, 100);
