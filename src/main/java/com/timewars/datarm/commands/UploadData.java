@@ -14,6 +14,7 @@ public class UploadData implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         ArrayList<String> list = new ArrayList<>();
+        if ( args.length == 1 ) list.add("<map_name>");
         return list;
     }
 
