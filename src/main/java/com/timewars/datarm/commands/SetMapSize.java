@@ -29,6 +29,8 @@ public class SetMapSize implements TabExecutor {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         ArrayList<String> list = new ArrayList<>();
         if ( args.length == 1 ) list.add("<radius>");
+        if ( args.length == 2 ) list.add("<time_to_shrink>");
+        if ( args.length == 3 ) list.add("<end_size_of_zone>");
         return list;
     }
 
@@ -38,6 +40,8 @@ public class SetMapSize implements TabExecutor {
             Player p = (Player) sender;
             Location center = p.getLocation();
             int radius = Integer.valueOf(args[0]);
+            int timeToShrink = Integer.valueOf(args[1]);
+            int endSizeOfZone = Integer.valueOf(args[2]);
 
             BlockData block = Bukkit.createBlockData(Material.GLASS);
             World world = p.getWorld();
@@ -87,7 +91,8 @@ public class SetMapSize implements TabExecutor {
                 }
             }, 100);
 
-            DataReminder.sp.setMapSize(center, radius);
+
+            DataReminder.sp.setMapSize(center, radius, timeToShrink, endSizeOfZone );
 
             return true;
         }

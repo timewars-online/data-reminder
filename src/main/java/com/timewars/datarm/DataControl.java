@@ -20,9 +20,12 @@ import java.util.Formatter;
 public class DataControl {
     public Block fSpot, sSpot;
     public World fw, sw;
+    ArrayList<Location> chests, spawnSpots, superChests, randomSuperChests;
+
     private Location center;
     private int radius;
-    ArrayList<Location> chests, spawnSpots, superChests, randomSuperChests;
+    private int timeToShrink;
+    private int endSizeOfZone;
 
     DataControl() {
         chests = new ArrayList<>();
@@ -45,21 +48,26 @@ public class DataControl {
         spawnSpots.clear();
     }
 
-    public void setMapSize(Location center, int radius) {
+    public void setMapSize(Location center, int radius, int timeToShrink, int endSizeOfZone) {
+
         this.center = center;
         this.radius = radius;
+        this.timeToShrink = timeToShrink;
+        this.endSizeOfZone = endSizeOfZone;
     }
 
     public void uploadMapSize(String mapname) {
+        if(center == null || radius == 0 || timeToShrink == 0 || endSizeOfZone == 0) return;
         try(Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/data?autoReconnect=true&useSSL=false", "root", "");
             Statement statement = connection.createStatement();
             Formatter q = new Formatter(); Formatter l = new Formatter(); Formatter j = new Formatter();) {
-            String s = q.format("SELECT * FROM map_border WHERE mapname = %s", mapname).toString();
+            String s = q.format("SELECT * FROM map_border WHERE mapname = '%s'", mapname).toString();
             if(statement.executeQuery(s).next()) {
-                s = q.format("DELETE FROM map_border WHERE mapname = %s", mapname).toString();
+                s = l.format("DELETE FROM map_border WHERE mapname = '%s'", mapname).toString();
                 statement.execute(s);
             }
-            s = q.format("INSERT map_border(mapname, xcord, ycord, zcord, radius) VALUES (%s, %d, %d, %d, %d)", mapname, (int) center.getX(), (int) center.getY(), (int) center.getZ(), radius).toString();
+            s = j.format("INSERT map_border(mapname, xcord, ycord, zcord, radius, time, endsize) VALUES ('%s', %d, %d, %d, %d, %d, %d)",
+                    mapname, (int) center.getX(), (int) center.getY(), (int) center.getZ(), radius, (int) timeToShrink, (int) endSizeOfZone).toString();
             statement.execute(s);
         } catch (SQLException ex) {
             ex.printStackTrace();
